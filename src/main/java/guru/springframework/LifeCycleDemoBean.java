@@ -13,57 +13,96 @@ import javax.annotation.PreDestroy;
  * Created by jt on 6/5/17.
  */
 @Component
-public class LifeCycleDemoBean implements InitializingBean, DisposableBean, BeanNameAware,
-        BeanFactoryAware, ApplicationContextAware{
+public class LifeCycleDemoBean implements InitializingBean,  DisposableBean, BeanNameAware, BeanFactoryAware, ApplicationContextAware {
 
 
+    /**
+     * Constructor
+     * #1
+     */
     public LifeCycleDemoBean() {
-        System.out.println("## I'm in the LifeCycleBean Constructor");
+        System.out.println("## - 1. LifeCycleBean Constructor worked.");
     }
 
-    @Override
-    public void destroy() throws Exception {
-        System.out.println("## The Lifecycle bean has been terminated");
-
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("## The LifeCycleBean has its properties set!");
-
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        System.out.println("## Bean Factory has been set");
-    }
-
+    /**
+     * BeanNameAware
+     * #2
+     */
     @Override
     public void setBeanName(String name) {
-        System.out.println("## My Bean Name is: " + name);
-
+        System.out.println("## - 2. setBeanName(name) method of BeanNameAware in LifeCycleDemoBean worked. " +
+                "The setted name is: " + name);
     }
 
+    /**
+     * BeanFactoryAware
+     * #3
+     */
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        System.out.println("## - 3. setBeanFactory(beanFactory) method of BeanFactoryAware in LifeCycleDemoBean worked. " +
+                "We didn't set any beanFactory here.");
+    }
+
+    /**
+     * ApplicationContextAware
+     * #4
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        System.out.println("## Application context has been set");
+        System.out.println("## - 4. setApplicationContext(applicationContext) method of ApplicationContextAware in LifeCycleDemoBean worked. " +
+                "We didn't set any applicationContext here.");
     }
 
+    /**
+     * beforeInit()
+     * #5
+     */
+    public void beforeInit(){
+        System.out.println("## - 5. beforeInit() method in LifeCycleDemoBean called by Bean Post Processor");
+    }
+
+    /**
+     * @PostConstruct
+     * #6
+     */
     @PostConstruct
     public void postConstruct(){
-        System.out.println("## The Post Construct annotated method has been called");
+        System.out.println("## - 6. The Post Construct annotated method in LifeCycleDemoBean has been called");
     }
 
+    /**
+     * InitializingBean
+     * #7
+     */
+    @Override
+    public void afterPropertiesSet() {
+        System.out.println("## - 7. afterPropertiesSet() method of InitializingBean in LifeCycleDemoBean worked");
+    }
+
+    /**
+     * afterInit()
+     * #8
+     */
+    public void afterInit(){
+        System.out.println("## - 8. afterInit() method in LifeCycleDemoBean called by Bean Post Processor");
+    }
+
+    /**
+     * @PreDestroy
+     * #9
+     */
     @PreDestroy
     public void preDestroy() {
-        System.out.println("## The Predestroy annotated method has been called");
+        System.out.println("## - 9. The Predestroy annotated method in LifeCycleDemoBean has been called");
     }
 
-    public void beforeInit(){
-        System.out.println("## - Before Init - Called by Bean Post Processor");
-    }
-
-    public void afterInit(){
-        System.out.println("## - After init called by Bean Post Processor");
+    /**
+     * DisposableBean
+     * #10
+     */
+    @Override
+    public void destroy() {
+        System.out.println("## - 10. destroy() method of DisposableBean in LifeCycleDemoBean worked");
     }
 }
